@@ -41,7 +41,7 @@ if ($conn->connect_error) {
     while ($row = $result->fetch_assoc() ) {
       if (in_array($row["id"], $listPreguntas)) {
         $resultat .= '{"question":' . json_encode($row["pregunta"]) . ',';
-        $resultat .= '"answers":' . json_encode($row["rp1"])."," . json_encode($row["rp2"]) .",". json_encode($row["rp3"])."," . json_encode($row["rp4"]) . '} ';
+        $resultat .= '"answers":[' . json_encode($row["rp1"])."," . json_encode($row["rp2"]) .",". json_encode($row["rp3"])."," . json_encode($row["rp4"]) . ']} ';
         
         if ($i != $Npreguntas-1 ) {
           $resultat .= ", ";

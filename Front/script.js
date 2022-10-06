@@ -15,7 +15,9 @@ function jugar() {
   
   fetch('../Back/getPreguntes.php?np='+nPreguntas)
         .then(response => response.json())
-        .then(data => pregunta(data,nPreguntas));  
+        .then(data => console.log(data));  
+
+        // pregunta(data,nPreguntas)
  }
 
 function pregunta(data, nPreguntas) {

@@ -6,7 +6,7 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 header("Allow: GET, POST, OPTIONS, PUT, DELETE");
 
 // $Npreguntas = intval($_GET["np"]);
-$Npreguntas = 4;
+$Npreguntas=4;
 $servername = "uzurdrive.ddns.net:3307";
 $username = "gur";
 $password = "1234";
@@ -20,7 +20,7 @@ if ($conn->connect_error) {
   function alterarPreguntas($Npreguntas)
   {
     $listPreguntas = array();
-    for ($i = 0; $i <= $Npreguntas; $i++) {
+    for ($i = 0; $i < $Npreguntas; $i++) {
       $n = rand(0, 11);
       if (in_array($n, $listPreguntas)) {
         $i--;
@@ -33,23 +33,25 @@ if ($conn->connect_error) {
   $listPreguntas = alterarPreguntas($Npreguntas);
   $_SESSION['listPreguntas'] = $listPreguntas;
 
-  $sql = "SELECT id,pregunta,rp1,rp2,rp3,rp4 FROM info";
-  $result = $conn->query($sql);
-
+  $result = $conn->query("SELECT id,pregunta,rp1,rp2,rp3,rp4 FROM info");
+  
   $i = 0;
   $resultat = '{"questions": [';
   if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc() && $i == $Npreguntas) {
-      if ($row['id'] == $listPreguntas[$i]) {
+    while ($row = $result->fetch_assoc() ) {
+      if (in_array($row["id"], $listPreguntas)) {
         $resultat .= '{"question":' . json_encode($row["pregunta"]) . ',';
-        $resultat .= '"answers":' . json_encode($row["rp1"]) . json_encode($row["rp2"]) . json_encode($row["rp3"]) . json_encode($row["rp4"]) . '} ';
-        $i++;
-        if ($i != $Npreguntas - 1) {
+        $resultat .= '"answers":' . json_encode($row["rp1"])."," . json_encode($row["rp2"]) .",". json_encode($row["rp3"])."," . json_encode($row["rp4"]) . '} ';
+        
+        if ($i != $Npreguntas-1 ) {
           $resultat .= ", ";
         }
+        $i++;
       }
     }
     $resultat .= ']}';
+  }else{
+    die("Sense dades");
   }
   echo $resultat;
 }

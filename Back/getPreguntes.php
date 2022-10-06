@@ -5,34 +5,51 @@ header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Conte
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 header("Allow: GET, POST, OPTIONS, PUT, DELETE");
 
-$Npreguntas = intval($_GET["np"]);
-$data = file_get_contents("./Quiz.json");
-$quiz = json_decode($data);
+// $Npreguntas = intval($_GET["np"]);
+$Npreguntas = 4;
+$servername = "uzurdrive.ddns.net:3307";
+$username = "gur";
+$password = "1234";
+$dbname = "quiz";
 
-function alterarPreguntas($Npreguntas)
-{
-  $listPreguntas = array();
-  for ($i = 0; $i <= $Npreguntas; $i++) {
-    $n = rand(0, 11);
-    if (in_array($n, $listPreguntas)) {
-      $i--;
-    } else {
-      array_push($listPreguntas, $n);
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+} else {
+  function alterarPreguntas($Npreguntas)
+  {
+    $listPreguntas = array();
+    for ($i = 0; $i <= $Npreguntas; $i++) {
+      $n = rand(0, 11);
+      if (in_array($n, $listPreguntas)) {
+        $i--;
+      } else {
+        array_push($listPreguntas, $n);
+      }
     }
+    return $listPreguntas;
   }
-  return $listPreguntas;
-}
-$listPreguntas = alterarPreguntas($Npreguntas);
-$_SESSION['listPreguntas'] = $listPreguntas;
+  $listPreguntas = alterarPreguntas($Npreguntas);
+  $_SESSION['listPreguntas'] = $listPreguntas;
 
-$resultat = '{"questions": [';
+  $sql = "SELECT id,pregunta,rp1,rp2,rp3,rp4 FROM info";
+  $result = $conn->query($sql);
 
-for ($i = 0; $i < $Npreguntas; $i++) {
-  $resultat .= '{"question":' . json_encode($quiz[$listPreguntas[$i]]->question) . ',';
-  $resultat .= '"answers":' . json_encode($quiz[$listPreguntas[$i]]->answers) . '} ';
-  if ($i != $Npreguntas - 1) {
-    $resultat .= ", ";
+  $i = 0;
+  $resultat = '{"questions": [';
+  if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc() && $i == $Npreguntas) {
+      if ($row['id'] == $listPreguntas[$i]) {
+        $resultat .= '{"question":' . json_encode($row["pregunta"]) . ',';
+        $resultat .= '"answers":' . json_encode($row["rp1"]) . json_encode($row["rp2"]) . json_encode($row["rp3"]) . json_encode($row["rp4"]) . '} ';
+        $i++;
+        if ($i != $Npreguntas - 1) {
+          $resultat .= ", ";
+        }
+      }
+    }
+    $resultat .= ']}';
   }
+  echo $resultat;
 }
-$resultat .= ']}';
-echo $resultat;

@@ -1,0 +1,17 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "uzurdrive.ddns.net",
+            "port": 3307,
+            "driver": "MySQL",
+            "name": "Quiz",
+            "database": "quiz",
+            "username": "gur",
+            "password": "1234"
+        }
+    ]
+}

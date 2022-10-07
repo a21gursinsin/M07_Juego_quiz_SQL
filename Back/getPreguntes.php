@@ -51,5 +51,5 @@ if ($conn->connect_error) {
   //   }
   //   $resultat .= ']}';
   // }
-  echo $resultat;
+  // echo $resultat;
 }

@@ -34,24 +34,22 @@ if ($conn->connect_error) {
   $_SESSION['listPreguntas'] = $listPreguntas;
 
   $result = $conn->query("SELECT id,pregunta,rp1,rp2,rp3,rp4 FROM info");
-  
+  echo $result->num_rows-1;
   $i = 0;
-  $resultat = '{"questions": [';
-  if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc() ) {
-      if (in_array($row["id"], $listPreguntas)) {
-        $resultat .= '{"question":' . json_encode($row["pregunta"]) . ',';
-        $resultat .= '"answers":[' . json_encode($row["rp1"])."," . json_encode($row["rp2"]) .",". json_encode($row["rp3"])."," . json_encode($row["rp4"]) . ']} ';
+  // $resultat = '{"questions": [';
+  // if ($result->num_rows > 0) {
+  //   while ($row = $result->fetch_assoc() ) {
+  //     if (in_array($row["id"], $listPreguntas)) {
+  //       $resultat .= '{"question":' . json_encode($row["pregunta"]) . ',';
+  //       $resultat .= '"answers":[' . json_encode($row["rp1"])."," . json_encode($row["rp2"]) .",". json_encode($row["rp3"])."," . json_encode($row["rp4"]) . ']} ';
         
-        if ($i != $Npreguntas-1 ) {
-          $resultat .= ", ";
-        }
-        $i++;
-      }
-    }
-    $resultat .= ']}';
-  }else{
-    die("Sense dades");
-  }
+  //       if ($i != $Npreguntas-1 ) {
+  //         $resultat .= ", ";
+  //       }
+  //       $i++;
+  //     }
+  //   }
+  //   $resultat .= ']}';
+  // }
   echo $resultat;
 }

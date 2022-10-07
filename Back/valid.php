@@ -4,12 +4,24 @@ header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Conte
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 header("Allow: GET, POST, OPTIONS, PUT, DELETE");
 
-$data = file_get_contents('./Quiz.json');
-$info = json_decode($data);
 session_start();
 $listPreguntas = $_SESSION['listPreguntas'];
 $jugada = json_decode($_POST["dades"]);
 $count = intval(0);
+
+$servername = "uzurdrive.ddns.net:3307";
+$username = "gur";
+$password = "1234";
+$dbname = "quiz";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+  } else {
+      
+  }
 
 for ($i = 0; $i < $jugada->nrespuestas; $i++) {
     if ($jugada->respuestas[$i] == $info[$listPreguntas[$i]]->correctIndex) {

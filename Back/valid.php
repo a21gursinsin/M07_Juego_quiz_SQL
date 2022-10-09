@@ -19,14 +19,21 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
-  } else {
-      
-  }
-
-for ($i = 0; $i < $jugada->nrespuestas; $i++) {
-    if ($jugada->respuestas[$i] == $info[$listPreguntas[$i]]->correctIndex) {
-        $count++;
+} else {
+    for ($i = 0; $i < $jugada->$nrespuestas; $i++) {
+        $result = $conn->query("SELECT correct FROM info where id = $listPreguntas[$i]+1");
+        while ($row = $result->fetch_assoc()) {
+            if ($jugada->respuestas[$i] == $row["correct"]) {
+                $count++;
+            }
+        }
     }
 }
+
+// for ($i = 0; $i < $jugada->nrespuestas; $i++) {
+//     if ($jugada->respuestas[$i] == $info[$listPreguntas[$i]]->correctIndex) {
+//         $count++;
+//     }
+// }
 
 echo json_encode($count);

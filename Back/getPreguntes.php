@@ -5,8 +5,8 @@ header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Conte
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 header("Allow: GET, POST, OPTIONS, PUT, DELETE");
 
-$Npreguntas = intval($_GET["np"]);
-// $Npreguntas = 4;
+// $Npreguntas = intval($_GET["np"]);
+$Npreguntas = 12;
 $servername = "uzurdrive.ddns.net:3307";
 $username = "gur";
 $password = "1234";
@@ -27,7 +27,8 @@ if ($conn->connect_error) {
     $listPreguntas = array();
     for ($i = 0; $i < $Npreguntas; $i++) {
       $n = array_rand($arrTotPreguntas, 1);
-      if (in_array($n, $listPreguntas) && $n == 0) {
+      echo $i . ' saco ' . $n . ' ';
+      if (in_array($n, $listPreguntas)) {
         $i--;
       } else {
         array_push($listPreguntas, $n);
